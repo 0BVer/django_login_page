@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+</head>
+<body>
+<form action="{% url 'register' %}" method="post">
+    {% csrf_token %}
+    <label for="username">Username: </label>
+    <input id="username" type="text" name="username" value="{{ current_name }}">
+    <label for="password">Password: </label>
+    <input id="password" type="text" name="password" value="{{ current_name }}">
+    <label for="password_confirm">Password Confirm: </label>
+    <input id="password_confirm" type="text" name="password_confirm" value="{{ current_name }}">
+    <label for="email">Email: </label>
+    <input id="email" type="email" name="email" value="{{ current_name }}">
+    <input type="submit" value="OK">
+</form>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+</body>
+</html>

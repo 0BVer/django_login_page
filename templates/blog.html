@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog</title>
+</head>
+<body>
+<button type="button" value="Logout"><a href=""></a></button>
+<br>
+
+<table border="1">
+    <thead>
+    <th>username</th>
+    <th>password</th>
+    <th>email</th>
+    <th>join</th>
+    </thead>
+    <tbody>
+    {% for data in users %}
+        <tr>
+            <td> {{ data.username }} </td>
+            <td> {{ data.password }} </td>
+            <td> {{ data.email }} </td>
+            <td> {{ data.date_joined }} </td>
+        </tr>
+        <br>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+</body>
+</html>
