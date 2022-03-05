@@ -15,9 +15,10 @@
 </form>
 <button><a href="{% url 'register' %}">register</a></button>
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-{% if success_message %}
-    <p><strong>{{ success_message }}</strong></p>
+{% if user.is_authenticated %}
+    <p><strong>{{ user.username }}</strong></p>
     <button><a href="{% url 'blog' %}">Go!</a></button>
+    <button><a href="{% url 'logout' %}">Go!</a></button>
 {% endif %}
 
 </body>
