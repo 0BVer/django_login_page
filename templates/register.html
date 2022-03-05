@@ -18,5 +18,9 @@
     <input type="submit" value="OK">
 </form>
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+{% if success_message %}
+    <p><strong>{{ success_message }}</strong></p>
+    <button><a href="{% url 'login' %}">Go to login</a></button>
+{% endif %}
 </body>
 </html>

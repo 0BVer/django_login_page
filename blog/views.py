@@ -1,4 +1,3 @@
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .models import Users
 from .forms import LoginForm, RegisterForm
@@ -17,7 +16,8 @@ def login(request):
             password = form.cleaned_data['password']
             user = Users.objects.get(username=username)
             if user.password == password:
-                return redirect('/blog/')
+                user.is_authenticated = True
+                return render(request, 'login.html', {'success_message': f"Welcome {user.username}"})
             return render(request, 'login.html', {'error_message': "id pw not correct"})
         return render(request, 'login.html', {'error_message': "error"})
 
@@ -32,10 +32,10 @@ def register(request):
             if password == password_confirm:
                 try:
                     user = Users.objects.all()
-                    user.create(username=form.cleaned_data['username'],
-                                password=form.cleaned_data['password'],
-                                email=form.cleaned_data['email'])
-                    return redirect('/blog/login/')
+                    user = user.create(username=form.cleaned_data['username'],
+                                       password=form.cleaned_data['password'],
+                                       email=form.cleaned_data['email'])
+                    return render(request, 'register.html', {'success_message': f"{user.username} created"})
                 except:
                     return render(request, 'register.html',
                                   {'form': form, 'error_message': "change username."})
@@ -52,4 +52,8 @@ def blog(request):
     if request.method == 'GET':
         return render(request, 'blog.html', {'users': Users.objects.all(), 'error_message': ""})
 
+
 # 로그아웃
+def logout(request):
+    if request.method == 'GET':
+        return render(request, 'login.html')
