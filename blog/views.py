@@ -5,8 +5,8 @@ from .models import Users
 from .forms import LoginForm, RegisterForm
 
 # Create your views here.
-loginTemp = 'sign-in/index.html'
-blogTemp = 'blog.index.html'
+loginTemp = 'blog/loginTemp.html'
+blogTemp = 'blog/blogTemp.html'
 
 
 # 로그인
@@ -22,8 +22,8 @@ def loginView(request):
             if user is not None:
                 login(request, user)
                 return redirect('blog')
-            return render(request, 'login.html', {'form': form, 'error_message': "id pw not correct"})
-        return render(request, 'login.html', {'form': form, 'error_message': "error"})
+            return render(request, loginTemp, {'form': form, 'error_message': "id pw not correct"})
+        return render(request, loginTemp, {'form': form, 'error_message': "error"})
 
 
 # 회원가입
@@ -56,11 +56,11 @@ def registerView(request):
 @login_required
 def blogView(request):
     if request.method == 'GET':
-        return render(request, 'blog.html', {'users': Users.objects.all(), 'error_message': ""})
+        return render(request, blogTemp, {'users': Users.objects.all(), 'error_message': ""})
 
 
 # 로그아웃
 def logoutView(request):
     if request.method == 'GET':
         logout(request)
-        return render(request, 'login.html')
+        return render(request, loginTemp)
