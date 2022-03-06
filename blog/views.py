@@ -4,23 +4,22 @@ from django.shortcuts import render, redirect
 from .models import Users
 from .forms import LoginForm, RegisterForm
 
-
 # Create your views here.
+loginTemp = 'sign-in/index.html'
+blogTemp = 'blog.index.html'
+
 
 # 로그인
 def loginView(request):
     if request.method == 'GET':
-        return render(request, 'login.html')
+        return render(request, loginTemp)
     elif request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
-            # user = authenticate(username=username, password=password)
-            user = authenticate(username='q', password='q')
-            print(user)
+            user = authenticate(username=username, password=password)
             if user is not None:
-                print(1)
                 login(request, user)
                 return redirect('blog')
             return render(request, 'login.html', {'form': form, 'error_message': "id pw not correct"})
@@ -28,42 +27,40 @@ def loginView(request):
 
 
 # 회원가입
-def register(request):
+def registerView(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
             password = form.cleaned_data['password']
             password_confirm = form.cleaned_data['password_confirm']
-            print(password_confirm)
-            print(password)
             if password == password_confirm:
-                print(2)
-                # try:
-                user = Users.objects.all()
-                user.create(username=form.cleaned_data['username'],
-                            password=form.cleaned_data['password'],
-                            email=form.cleaned_data['email'])
-
-                return redirect('login')
-                # except:
-                #     return render(request, 'register.html',
-                #                   {'form': form, 'error_message': "change username."})
+                try:
+                    users = Users.objects.all()
+                    user = users.create(username=form.cleaned_data['username'],
+                                        email=form.cleaned_data['email'])
+                    user.set_password(password)
+                    user.save()
+                    return redirect('login')
+                except:
+                    return render(request, 'register.html',
+                                  {'form': form, 'error_message': "change username."})
             else:
                 return render(request, 'register.html',
                               {'form': form, 'error_message': "PW and PW confirm isn't same."})
     else:
-        return render(request, 'register.html', {'error_message': "a"})
+        return render(request, 'register.html', {'error_message': ""})
     return render(request, 'register.html', {'error_message': "error not allowed"})
 
 
 # 블로그
 @login_required
-def blog(request):
+def blogView(request):
     if request.method == 'GET':
         return render(request, 'blog.html', {'users': Users.objects.all(), 'error_message': ""})
 
 
 # 로그아웃
-def logout(request):
+def logoutView(request):
     if request.method == 'GET':
+        logout(request)
         return render(request, 'login.html')
