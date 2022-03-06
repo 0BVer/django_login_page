@@ -11,9 +11,7 @@ blogTemp = 'blog/blogTemp.html'
 
 # 로그인
 def loginView(request):
-    if request.method == 'GET':
-        return render(request, loginTemp)
-    elif request.method == 'POST':
+    if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data.get('username')
@@ -23,7 +21,8 @@ def loginView(request):
                 login(request, user)
                 return redirect('blog')
             return render(request, loginTemp, {'form': form, 'error_message': "id pw not correct"})
-        return render(request, loginTemp, {'form': form, 'error_message': "error"})
+        return render(request, loginTemp, {'form': form, 'error_message': "please fill fields"})
+    return render(request, loginTemp)
 
 
 # 회원가입
@@ -49,7 +48,6 @@ def registerView(request):
                               {'form': form, 'error_message': "PW and PW confirm isn't same."})
     else:
         return render(request, 'register.html', {'error_message': ""})
-    return render(request, 'register.html', {'error_message': "error not allowed"})
 
 
 # 블로그
